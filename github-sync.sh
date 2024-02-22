@@ -4,6 +4,7 @@ set -e
 
 UPSTREAM_REPO=$1
 BRANCH_MAPPING=$2
+FORCE_PUSH=$3
 
 if [[ -z "$UPSTREAM_REPO" ]]; then
   echo "Missing \$UPSTREAM_REPO"
@@ -39,13 +40,13 @@ git fetch tmp_upstream --quiet
 git remote --verbose
 
 echo "Pushing changings from tmp_upstream to origin"
-git push origin "refs/remotes/tmp_upstream/${BRANCH_MAPPING%%:*}:refs/heads/${BRANCH_MAPPING#*:}" --force
+git push origin "refs/remotes/tmp_upstream/${BRANCH_MAPPING%%:*}:refs/heads/${BRANCH_MAPPING#*:}" $FORCE_PUSH
 
 if [[ "$SYNC_TAGS" = true ]]; then
   echo "Force syncing all tags"
   git tag -d $(git tag -l) > /dev/null
   git fetch tmp_upstream --tags --quiet
-  git push origin --tags --force
+  git push origin --tags $FORCE_PUSH
 fi
 
 echo "Removing tmp_upstream"

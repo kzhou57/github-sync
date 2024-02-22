@@ -20,6 +20,11 @@ inputs:
   sync_tags:
     description: Should tags also be synced
     required: false
+  force_push:
+    description: Extra git command options, e.g. --force. Pass empty string to disable force push.
+    required: false
+    default: '--force'
+
 runs:
   using: 'docker'
   image: docker://ghcr.io/repo-sync/github-sync:v2.3.0
@@ -29,3 +34,4 @@ runs:
   args:
     - ${{ inputs.source_repo }}
     - ${{ inputs.source_branch }}:${{ inputs.destination_branch }}
+    - ${{ inputs.force_push }}

@@ -3,7 +3,7 @@
 [![All Contributors](https://img.shields.io/badge/all_contributors-6-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END --> 
 
-A GitHub Action for syncing the current repository using **force push**.
+A GitHub Action for syncing the current repository from another repository
 
 
 ## Features
@@ -12,6 +12,7 @@ A GitHub Action for syncing the current repository using **force push**.
  * GitHub action can be triggered on a timer or on push
  * To push to a remote repository, please checkout [git-sync](https://github.com/marketplace/actions/git-sync-action)
  * Support syncing tags.
+ * Support force push or not
 
 
 ## Usage
@@ -47,6 +48,10 @@ If `source_repo` is private or with another provider, either (1) use an authenti
 ### Workflow overwriting
 
 If `destination_branch` and the branch where you will create this workflow will be the same, The workflow (and all files) will be overwritten by `source_branch` files. A potential solution is: Create a new branch with the actions file and make it the default branch.
+
+## Advanced Usage: Without force push
+- By default, we are using `--force` option to push, which will overwrite everything in the destination branch.
+- You can choose to pass empty string to `force_push` parameter, and it will not do a force push.
 
 ## Advanced Usage: Sync all branches
 1. Make a backup
