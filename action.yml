@@ -17,13 +17,18 @@ inputs:
   github_token:
     description: GitHub token secret
     required: true
+  pull_push_mode:
+    description: Choose PULL PUSH mode than the default DIRECT PUSH mode, and can preserve the changes in the destionation branch if there are any. In this mode the sync_tags option will be ignored.
+    default: false
   sync_tags:
     description: Should tags also be synced
     required: false
   force_push:
     description: Extra git command options, e.g. --force. Pass empty string to disable force push.
     required: false
+    type: string
     default: '--force'
+
 
 runs:
   using: 'docker'
@@ -31,6 +36,7 @@ runs:
   env:
     GITHUB_TOKEN: ${{ inputs.github_token }}
     SYNC_TAGS: ${{ inputs.sync_tags }}
+    PULL_PUSH_MODE: ${{ inputs.pull_push_mode }}
   args:
     - ${{ inputs.source_repo }}
     - ${{ inputs.source_branch }}:${{ inputs.destination_branch }}

@@ -39,14 +39,24 @@ echo "Fetching tmp_upstream"
 git fetch tmp_upstream --quiet
 git remote --verbose
 
-echo "Pushing changings from tmp_upstream to origin"
-git push origin "refs/remotes/tmp_upstream/${BRANCH_MAPPING%%:*}:refs/heads/${BRANCH_MAPPING#*:}" $FORCE_PUSH
+if [[ "$PULL_PUSH" = true ]]; then
+  echo "PULL PUSH Mode : Pulling from upstream to local and pushing to origin, it will not overwrite the destination branch"
+  git pull tmp_upstream "${BRANCH_MAPPING%%:*}" --no-edit
+  git push origin "${BRANCH_MAPPING#*:}"
 
-if [[ "$SYNC_TAGS" = true ]]; then
-  echo "Force syncing all tags"
-  git tag -d $(git tag -l) > /dev/null
-  git fetch tmp_upstream --tags --quiet
-  git push origin --tags $FORCE_PUSH
+  # TRICKY : not support sync all tags in PULL_PUSH mode yet
+else
+
+  echo "DIRECT PUSH Mode : Using direct push from upstream to origin, it will overwrite the destination branch"
+  git push origin "refs/remotes/tmp_upstream/${BRANCH_MAPPING%%:*}:refs/heads/${BRANCH_MAPPING#*:}" $FORCE_PUSH
+
+  if [[ "$SYNC_TAGS" = true ]]; then
+    echo "Force syncing all tags"
+    git tag -d $(git tag -l) > /dev/null
+    git fetch tmp_upstream --tags --quiet
+    git push origin --tags $FORCE_PUSH
+  fi
+
 fi
 
 echo "Removing tmp_upstream"
