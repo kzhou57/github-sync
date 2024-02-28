@@ -32,7 +32,7 @@ inputs:
 
 runs:
   using: 'docker'
-  image: docker://ghcr.io/kzhou57/github-sync:lastest'
+  image: docker://ghcr.io/kzhou57/github-sync:v2.5.2'
   env:
     GITHUB_TOKEN: ${{ inputs.github_token }}
     SYNC_TAGS: ${{ inputs.sync_tags }}
